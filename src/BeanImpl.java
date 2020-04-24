@@ -89,7 +89,6 @@ public class BeanImpl implements Bean {
 	/**
 	 * Sets the current level that the bean is on
 	 * @param i the level you wish to set levelCount to
-	 * @return the direction the bean is going to go. (true = right) (false = left)
 	 */
 	public void setLevelCount(int i) {
 		levelCount = i;

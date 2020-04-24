@@ -160,7 +160,7 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	 * will be remaining.
 	 */
 	public void upperHalf() {
-		for (int i = 0; i < (slots.length)/2; i++) {
+		for (int i = 0; i < (slots.length) / 2; i++) {
 			while (!slots[i].isEmpty()) {
 				slots[i].remove(0);
 			}
@@ -174,7 +174,7 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	 * will be remaining.
 	 */
 	public void lowerHalf() {
-		for (int i = (slots.length)/2; i < slots.length; i++) {
+		for (int i = (slots.length) / 2; i < slots.length; i++) {
 			while (!slots[i].isEmpty()) {
 				slots[i].remove(0);
 			}
@@ -237,7 +237,7 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 		}
 
 		for (int i = 0; i < slots.length; i++) {
-			while(!slots[i].isEmpty()) {
+			while (!slots[i].isEmpty()) {
 				((BeanImpl)slots[i].get(0)).setLevelCount(1);
 				beansLeft.add(slots[i].remove(0));
 			}
@@ -281,17 +281,17 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 			board[board.length - 1][x] = null;
 		}
 
-		for (int i = board.length-2; i > -1; i--) {
-			if ((x =getInFlightBeanXPos(i)) == -1) {
+		for (int i = board.length - 2; i > -1; i--) {
+			if ((x = getInFlightBeanXPos(i)) == -1) {
 				continue;
 			} else {
 				boolean goRight = ((BeanImpl)board[i][x]).nextLevel();
 
 				if (goRight) {
-					board[i+1][x+1] = board[i][x];
+					board[i + 1][x + 1] = board[i][x];
 					board[i][x] = null;
 				} else {
-					board[i+1][x] = board[i][x];
+					board[i + 1][x] = board[i][x];
 					board[i][x] = null;
 				}
 			}
