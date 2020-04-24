@@ -5,6 +5,7 @@ import java.util.Formatter;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
+import java.util.ArrayList;
 
 /**
  * Code by @author Wonsun Ahn
@@ -40,8 +41,35 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	 * 
 	 * @param slotCount the number of slots in the machine
 	 */
-	BeanCounterLogicImpl(int slotCount) {
+
+	private int slotCount;
+	private Bean[][] board;
+	private int beansUsed;
+	private ArrayList<Bean>[] slots;
+	private ArrayList<Bean> beansLeft;
+
+
+
+
+	BeanCounterLogicImpl(int s) {
 		// TODO: Implement
+		slotCount = s;
+		board = new Bean[slotCount][slotCount];
+
+		for (int i = 0; i < board.length; i++)
+		{
+			for (int j = 0; j < board[i].length; j++)
+				board[i][j] = null;
+		}
+
+		slots = new ArrayList[slotCount];
+
+		for (int i = 0; i < slots.length; i++)
+		{
+			slots[i] = new ArrayList<Bean>();
+		}
+
+
 	}
 
 	/**
@@ -51,7 +79,7 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	 */
 	public int getSlotCount() {
 		// TODO: Implement
-		return 1;
+		return slotCount;
 	}
 	
 	/**
@@ -61,7 +89,7 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	 */
 	public int getRemainingBeanCount() {
 		// TODO: Implement
-		return 0;
+		return beansLeft.size();
 	}
 
 	/**
@@ -72,7 +100,18 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	 */
 	public int getInFlightBeanXPos(int yPos) {
 		// TODO: Implement
-		return NO_BEAN_IN_YPOS;
+		int x = -1;
+
+		for (int i = 0; i < board[yPos].length; i++)
+		{
+			if (board[yPos][i] != null)
+				x = i;
+		}
+
+		if (x == -1)
+			return NO_BEAN_IN_YPOS;
+		else
+			return x;
 	}
 
 	/**
@@ -83,7 +122,7 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	 */
 	public int getSlotBeanCount(int i) {
 		// TODO: Implement
-		return 0;
+		return slots[i].size();
 	}
 
 	/**
@@ -93,7 +132,24 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	 */
 	public double getAverageSlotBeanCount() {
 		// TODO: Implement
-		return 0;
+
+		int count = 0;
+		int sum = 0;
+		double avg = 0;
+
+		for (int i = 0; i < slots.length; i++)
+		{
+			count += slots[i].size();
+			sum += i * slots[i].size();
+		}
+
+		avg = (double)sum / count;
+
+		if (Double.isNaN(avg))
+			return 0;
+		else
+			return avg;
+
 	}
 
 	/**
@@ -104,6 +160,12 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	 */
 	public void upperHalf() {
 		// TODO: Implement
+
+		for (int i = 0; i < (slots.length)/2; i++)
+		{
+			while (!slots[i].isEmpty())
+				slots[i].remove(0);
+		}
 	}
 
 	/**
@@ -113,7 +175,11 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	 * will be remaining.
 	 */
 	public void lowerHalf() {
-		// TODO: Implement
+		for (int i = (slots.length)/2; i < slots.length; i++)
+		{
+			while (!slots[i].isEmpty())
+				slots[i].remove(0);
+		}
 	}
 
 	/**
@@ -129,6 +195,28 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	 */
 	public void reset(Bean[] beans) {
 		// TODO: Implement
+
+		for (int i = 0; i < slots.length; i++)
+		{
+			slots[i] = new ArrayList<Bean>();
+		}
+
+		beansLeft = new ArrayList<Bean>();
+
+		for (int i = 0; i < beans.length; i++)
+		{
+			beansLeft.add(beans[i]);
+		}
+
+		for (int i = 0; i < board.length; i++)
+		{
+			for (int j = 0; j < board[i].length; j++)
+				board[i][j] = null;
+		}
+
+		board[0][0] = beansLeft.remove(0);
+
+
 	}
 
 	/**
@@ -138,6 +226,32 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	 */
 	public void repeat() {
 		// TODO: Implement
+		for (int i = 0; i < board.length; i++)
+		{
+			int x = getInFlightBeanXPos(i);
+
+			if (x != -1)
+			{	
+				((BeanImpl)board[i][x]).setLevelCount(1);
+				beansLeft.add(board[i][x]);
+				board[i][x] = null;
+			}
+
+		}
+
+		for (int i = 0; i < slots.length; i++)
+		{
+			while(!slots[i].isEmpty())
+			{
+				((BeanImpl)slots[i].get(0)).setLevelCount(1);
+				beansLeft.add(slots[i].remove(0));
+			}
+		}
+
+		if (!beansLeft.isEmpty())
+			board[0][0] = beansLeft.remove(0);
+
+
 	}
 
 	/**
@@ -150,7 +264,56 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	 */
 	public boolean advanceStep() {
 		// TODO: Implement
-		return false;
+		boolean isEmpty = true;
+
+		for (int i = 0; i < board.length; i++)
+		{
+			for (int j = 0; j < board[i].length; j++)
+			{
+				if (board[i][j] != null)
+					isEmpty = false;
+			}
+		}
+
+		if (beansLeft.size() == 0 && isEmpty)
+			return false;
+
+		int x;
+
+		if ((x = getInFlightBeanXPos(board.length - 1)) != -1)
+		{
+			slots[x].add(board[board.length - 1][x]);	
+			board[board.length - 1][x] = null;
+		}
+
+		for (int i = board.length-2; i > -1; i--)
+		{
+			if ((x =getInFlightBeanXPos(i)) == -1)
+				continue;
+			else
+			{
+				boolean goRight = ((BeanImpl)board[i][x]).nextLevel();
+
+				if (goRight)
+				{
+					board[i+1][x+1] = board[i][x];
+					board[i][x] = null;
+				}
+				else
+				{
+					board[i+1][x] = board[i][x];
+					board[i][x] = null;
+				}
+			}
+		}
+
+		if (beansLeft.size() != 0)
+			board[0][0] = beansLeft.remove(0);
+
+		 
+
+		return true;
+
 	}
 	
 	/**

@@ -42,7 +42,56 @@ public class BeanImpl implements Bean {
 	 * @param isLuck whether the bean is in luck mode
 	 * @param rand   the random number generator
 	 */
+
+	int skill;
+	int _slotCount;
+	boolean _isLuck;
+	Random _rand;
+	int levelCount;
+
+
 	BeanImpl(int slotCount, boolean isLuck, Random rand) {
 		// TODO: Implement
+		_slotCount = slotCount;
+		_isLuck = isLuck;
+		_rand = rand;
+
+		if (isLuck)
+		{
+			skill = -1;
+		}
+		else
+		{
+			double skillAvg = _slotCount * .5;
+			double stdDev = (double)(Math.sqrt(_slotCount * .5 * (1 - .5)));
+			skill = (int)(Math.round(_rand.nextGaussian() * stdDev + skillAvg));
+		}
+
+		levelCount = 1;
+	}
+
+
+	public boolean nextLevel()
+	{
+		if (_isLuck)
+		{
+			return (_rand.nextInt(2) == 1);
+		}
+		else
+		{
+			if (levelCount <= skill)
+			{
+				levelCount++;
+				return true;
+			}
+			else
+				return false;
+		}
+
+	}
+
+	public void setLevelCount(int i)
+	{
+		levelCount = i;
 	}
 }
