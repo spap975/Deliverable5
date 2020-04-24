@@ -44,46 +44,53 @@ public class BeanImpl implements Bean {
 	 */
 
 	int skill;
-	int _slotCount;
-	boolean _isLuck;
-	Random _rand;
+	int slotCount;
+	boolean isLuck;
+	Random rand;
 	int levelCount;
 
 
-	BeanImpl(int slotCount, boolean isLuck, Random rand) {
+	BeanImpl(int slotCountt, boolean isLuckk, Random randd) {
 		// TODO: Implement
-		_slotCount = slotCount;
-		_isLuck = isLuck;
-		_rand = rand;
+		slotCount = slotCountt;
+		isLuck = isLuckk;
+		rand = randd;
 
 		if (isLuck) {
 			skill = -1;
-		}
-		else {
-			double skillAvg = _slotCount * .5;
-			double stdDev = (double)(Math.sqrt(_slotCount * .5 * (1 - .5)));
-			skill = (int)(Math.round(_rand.nextGaussian() * stdDev + skillAvg));
+		} else {
+			double skillAvg = slotCount * .5;
+			double stdDev = (double)(Math.sqrt(slotCount * .5 * (1 - .5)));
+			skill = (int)(Math.round(rand.nextGaussian() * stdDev + skillAvg));
 		}
 
 		levelCount = 1;
 	}
 
 
+	/**
+	 * Determines the direction of where the bean in going to go. 
+	 * @return the direction the bean is going to go. (true = right) (false = left)
+	 */
 	public boolean nextLevel() {
-		if (_isLuck) {
-			return (_rand.nextInt(2) == 1);
-		}
-		else {
+		if (isLuck) {
+			return (rand.nextInt(2) == 1);
+		} else {
 			if (levelCount <= skill) {
 				levelCount++;
 				return true;
-			}
-			else
+			} else {
 				return false;
+			}
 		}
 
 	}
 
+	/**
+	 * Sets the current level that the bean is on
+	 * @param i the level you wish to set levelCount to
+	 * @return the direction the bean is going to go. (true = right) (false = left)
+	 */
 	public void setLevelCount(int i) {
 		levelCount = i;
 	}

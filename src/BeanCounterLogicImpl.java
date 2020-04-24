@@ -110,8 +110,7 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 
 		if (x == -1) {
 			return NO_BEAN_IN_YPOS;
-		}
-		else {
+		} else {
 			return x;
 		}
 	}
@@ -148,8 +147,7 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 
 		if (Double.isNaN(avg)) {
 			return 0;
-		}
-		else {
+		} else {
 			return avg;
 		}
 
@@ -286,15 +284,13 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 		for (int i = board.length-2; i > -1; i--) {
 			if ((x =getInFlightBeanXPos(i)) == -1) {
 				continue;
-			}
-			else {
+			} else {
 				boolean goRight = ((BeanImpl)board[i][x]).nextLevel();
 
 				if (goRight) {
 					board[i+1][x+1] = board[i][x];
 					board[i][x] = null;
-				}
-				else {
+				} else {
 					board[i+1][x] = board[i][x];
 					board[i][x] = null;
 				}
