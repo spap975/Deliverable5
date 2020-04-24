@@ -48,9 +48,7 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	private int beansUsed;
 	private ArrayList<Bean>[] slots;
 	private ArrayList<Bean> beansLeft;
-
-
-
+	private int initialSize;
 
 	BeanCounterLogicImpl(int s) {
 		// TODO: Implement
@@ -153,6 +151,21 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 
 	}
 
+
+	/**
+	 * Counts the current number of beans in the slots
+	 * @return total number of beans
+	 */
+	public int countBeansInSlots()
+	{
+		int count = 0;
+		for (int i = 0; i < slots.length; i++) {
+			count += slots[i].size();
+		}
+
+		return count;
+	}
+
 	/**
 	 * Removes the lower half of all beans currently in slots, keeping only the
 	 * upper half. If there are an odd number of beans, remove (N-1)/2 beans, where
@@ -160,11 +173,20 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	 * will be remaining.
 	 */
 	public void upperHalf() {
-		for (int i = 0; i < (slots.length) / 2; i++) {
-			while (!slots[i].isEmpty()) {
-				slots[i].remove(0);
+		int total = countBeansInSlots();
+		int i = 0;
+		int x = 0;
+
+		while (i < total / 2 && x < slots.length) {
+			if (slots[x].isEmpty()) {
+				x++;
+				continue;
+			} else {
+				slots[x].remove(0);
+				i++;
 			}
 		}
+
 	}
 
 	/**
@@ -174,9 +196,17 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	 * will be remaining.
 	 */
 	public void lowerHalf() {
-		for (int i = (slots.length) / 2; i < slots.length; i++) {
-			while (!slots[i].isEmpty()) {
-				slots[i].remove(0);
+		int total = countBeansInSlots();
+		int i = 0;
+		int x = slots.length - 1;
+
+		while (i < total / 2 && x > -1) {
+			if (slots[x].isEmpty()) {
+				x--;
+				continue;
+			} else {
+				slots[x].remove(0);
+				i++;
 			}
 		}
 	}
@@ -194,6 +224,7 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	 */
 	public void reset(Bean[] beans) {
 		// TODO: Implement
+		initialSize = beans.length;
 
 		for (int i = 0; i < slots.length; i++) {
 			slots[i] = new ArrayList<Bean>();
