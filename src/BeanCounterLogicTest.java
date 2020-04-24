@@ -37,7 +37,10 @@ public class BeanCounterLogicTest {
 		 * how to use the Verify API, look at:
 		 * https://github.com/javapathfinder/jpf-core/wiki/Verify-API-of-JPF
 		 */
-		
+
+		slotCount = Verify.getInt(1,5);
+		beanCount = Verify.getInt(0,3);
+		isLuck = Verify.getBoolean();		
 				
 		// Create the internal logic
 		logic = BeanCounterLogic.createInstance(slotCount);
@@ -71,22 +74,21 @@ public class BeanCounterLogicTest {
 	 */
 	@Test
 	public void testReset() {
-		// TODO: Implement
-		/*
-		 * Currently, it just prints out the failString to demonstrate to you all the
-		 * cases considered by Java Path Finder. If you called the Verify API correctly
-		 * in setUp(), you should see all combinations of machines
-		 * (slotCount/beanCount/isLucky) printed here:
-		 * 
-		 * Failure in (slotCount=1, beanCount=0, isLucky=false):
-		 * Failure in (slotCount=1, beanCount=0, isLucky=true):
-		 * Failure in (slotCount=1, beanCount=1, isLucky=false):
-		 * Failure in (slotCount=1, beanCount=1, isLucky=true):
-		 * ...
-		 * 
-		 * PLEASE REMOVE when you are done implementing.
-		 */
-		System.out.println(failString);
+		
+		logic.reset(beans);
+
+		if (beanCount > 0) {
+			assertEquals(beanCount - 1, logic.getRemainingBeanCount());
+			assertEquals(logic.getInFlightBeanXPos(0), 0);
+			assertEquals(logic.getAverageSlotBeanCount(), 0.0);
+		}
+
+		if (beanCount == 0) {
+			assertEquals(0, logic.getRemainingBeanCount());
+			assertEquals(logic.getInFlightBeanXPos(0), -1);
+			assertEquals(logic.getAverageSlotBeanCount(), 0.0);
+		}
+
 	}
 
 	/**

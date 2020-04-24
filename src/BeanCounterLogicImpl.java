@@ -48,7 +48,6 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	private int beansUsed;
 	private ArrayList<Bean>[] slots;
 	private ArrayList<Bean> beansLeft;
-	private int initialSize;
 
 	BeanCounterLogicImpl(int s) {
 		// TODO: Implement
@@ -156,8 +155,7 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	 * Counts the current number of beans in the slots
 	 * @return total number of beans
 	 */
-	public int countBeansInSlots()
-	{
+	public int countBeansInSlots() {
 		int count = 0;
 		for (int i = 0; i < slots.length; i++) {
 			count += slots[i].size();
@@ -224,7 +222,6 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	 */
 	public void reset(Bean[] beans) {
 		// TODO: Implement
-		initialSize = beans.length;
 
 		for (int i = 0; i < slots.length; i++) {
 			slots[i] = new ArrayList<Bean>();
