@@ -56,12 +56,10 @@ public class BeanImpl implements Bean {
 		_isLuck = isLuck;
 		_rand = rand;
 
-		if (isLuck)
-		{
+		if (isLuck) {
 			skill = -1;
 		}
-		else
-		{
+		else {
 			double skillAvg = _slotCount * .5;
 			double stdDev = (double)(Math.sqrt(_slotCount * .5 * (1 - .5)));
 			skill = (int)(Math.round(_rand.nextGaussian() * stdDev + skillAvg));
@@ -71,16 +69,12 @@ public class BeanImpl implements Bean {
 	}
 
 
-	public boolean nextLevel()
-	{
-		if (_isLuck)
-		{
+	public boolean nextLevel() {
+		if (_isLuck) {
 			return (_rand.nextInt(2) == 1);
 		}
-		else
-		{
-			if (levelCount <= skill)
-			{
+		else {
+			if (levelCount <= skill) {
 				levelCount++;
 				return true;
 			}
@@ -90,8 +84,7 @@ public class BeanImpl implements Bean {
 
 	}
 
-	public void setLevelCount(int i)
-	{
+	public void setLevelCount(int i) {
 		levelCount = i;
 	}
 }
