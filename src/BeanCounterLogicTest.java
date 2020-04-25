@@ -80,13 +80,15 @@ public class BeanCounterLogicTest {
 		if (beanCount > 0) {
 			assertEquals(beanCount - 1, logic.getRemainingBeanCount());
 			assertEquals(logic.getInFlightBeanXPos(0), 0);
-			assertEquals(logic.getAverageSlotBeanCount(), 0.0, 0.0);
 		}
 
 		if (beanCount == 0) {
 			assertEquals(0, logic.getRemainingBeanCount());
 			assertEquals(logic.getInFlightBeanXPos(0), -1);
-			assertEquals(logic.getAverageSlotBeanCount(), 0.0, 0.0);
+		}
+
+		for (int i = 0; i < slotCount; i++) {
+			assertEquals(0, logic.getSlotBeanCount(i));
 		}
 
 	}
@@ -305,5 +307,24 @@ public class BeanCounterLogicTest {
 
 
 
+	}
+
+	/**
+	 * Test case for boolean advanceStep().
+	 * Preconditions: None.
+	 * Execution steps: Call logic.reset(beans).
+	 *                  Call logic.advanceStep() in a loop until it returns false (the machine terminates).
+	 * Invariants: After the machine terminates,
+	 *             getAverageSlotBeanCount() return a number greater than
+	 *             or equal to 0 and less than or equal to slotCount
+	 */
+	@Test
+	public void testAdvanceStepAvg() {
+		logic.reset(beans);
+
+		while (logic.advanceStep() != false) {}
+
+		assertTrue(logic.getAverageSlotBeanCount() >= 0);
+		assertTrue(logic.getAverageSlotBeanCount() <= slotCount-1);
 	}
 }
