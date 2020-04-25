@@ -325,6 +325,6 @@ public class BeanCounterLogicTest {
 		while (logic.advanceStep() != false) {}
 
 		assertTrue(logic.getAverageSlotBeanCount() >= 0);
-		assertTrue(logic.getAverageSlotBeanCount() <= slotCount-1);
+		assertTrue(logic.getAverageSlotBeanCount() <= slotCount - 1);
 	}
 }
