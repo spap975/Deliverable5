@@ -107,7 +107,8 @@ public class BeanCounterLogicTest {
 		while (logic.advanceStep() != false) {
 
 			for (int i = 0; i < slotCount; i++) {
-				assertTrue(logic.getInFlightBeanXPos(i) < slotCount && logic.getInFlightBeanXPos(i) > -2);
+				assertTrue(logic.getInFlightBeanXPos(i) < slotCount);
+				assertTrue(logic.getInFlightBeanXPos(i) > -2);
 			}
 		}
 	}
@@ -188,15 +189,36 @@ public class BeanCounterLogicTest {
 
 		while (logic.advanceStep() != false) {}
 
+		int[] slots = new int[slotCount];
+
+		for (int i = 0; i < slotCount; i++) {
+			slots[i] = logic.getSlotBeanCount(i);
+		}
+
+		int halfCount = beanCount / 2;
+
+		for (int i = slotCount - 1; i > 0; i--) {
+			if (halfCount - logic.getSlotBeanCount(i) > -1) {
+				slots[i] = 0;
+				halfCount -= logic.getSlotBeanCount(i);
+			} else {
+				slots[i] -= halfCount;
+				break;
+			}
+
+
+		}
+
+
 		logic.lowerHalf();
 
 		int sum = 0;
 
 		for (int i = 0; i < slotCount; i++) {
-			sum += logic.getSlotBeanCount(i);
+			assertEquals(slots[i], logic.getSlotBeanCount(i));
 		}
 
-		assertEquals(sum, beanCount/2);
+		
 
 	}
 	
@@ -218,15 +240,33 @@ public class BeanCounterLogicTest {
 
 		while (logic.advanceStep() != false) {}
 
+		int[] slots = new int[slotCount];
+
+		for (int i = 0; i < slotCount; i++) {
+			slots[i] = logic.getSlotBeanCount(i);
+		}
+
+		int halfCount = beanCount / 2;
+
+		for (int i = 0; i < slotCount; i++) {
+			if (halfCount - logic.getSlotBeanCount(i) > -1) {
+				slots[i] = 0;
+				halfCount -= logic.getSlotBeanCount(i);
+			} else {
+				slots[i] -= halfCount;
+				break;
+			}
+
+
+		}
+
 		logic.upperHalf();
 
 		int sum = 0;
 
 		for (int i = 0; i < slotCount; i++) {
-			sum += logic.getSlotBeanCount(i);
+			assertEquals(slots[i], logic.getSlotBeanCount(i));
 		}
-
-		assertEquals(sum, beanCount/2);
 	}
 	
 	/**
@@ -256,8 +296,7 @@ public class BeanCounterLogicTest {
 
 		while (logic.advanceStep() != false) {}
 
-		if (!isLuck)
-		{
+		if (!isLuck) {
 			for (int i = 0; i < slotCount; i++) {
 				assertEquals(slots[i], logic.getSlotBeanCount(i));
 			}
