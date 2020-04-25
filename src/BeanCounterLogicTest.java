@@ -315,8 +315,8 @@ public class BeanCounterLogicTest {
 	 * Execution steps: Call logic.reset(beans).
 	 *                  Call logic.advanceStep() in a loop until it returns false (the machine terminates).
 	 * Invariants: After the machine terminates,
-	 *             getAverageSlotBeanCount() return a number greater than
-	 *             or equal to 0 and less than or equal to slotCount
+	 *             getAverageSlotBeanCount() returns a number greater than
+	 *             or equal to 0 and less than or equal to slotCount-1
 	 */
 	@Test
 	public void testAdvanceStepAvg() {
